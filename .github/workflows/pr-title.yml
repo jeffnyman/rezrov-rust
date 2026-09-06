@@ -1,0 +1,41 @@
+name: PR Title
+
+# Merges into main are squash-only, so the commit that lands takes its message
+# from the PR title rather than from the branch's commits. Nothing checks
+# commit messages locally, which makes this the only point where a Conventional
+# Commits subject is enforced, and the PR title the only thing that shapes
+# main's history.
+on:
+  pull_request:
+    # `edited` re-runs the check when the title changes; `synchronize` keeps
+    # the status attached to the latest commit, which branch protection
+    # requires.
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  pr-title:
+    name: pr-title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # The standard Conventional Commits types. Nothing downstream reads
+          # them yet, so this list is the whole definition; if a release or
+          # changelog tool is added later, keep the two in step.
+          types: |
+            build
+            chore
+            ci
+            docs
+            feat
+            fix
+            perf
+            refactor
+            revert
+            style
+            test

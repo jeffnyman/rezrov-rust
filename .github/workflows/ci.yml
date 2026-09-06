@@ -1,0 +1,72 @@
+name: CI
+
+# Squash-only merges mean main receives one reviewed commit per PR, so the
+# pull_request runs are the real gate. The push trigger re-checks the squashed
+# result, which is the commit release-plz reads when deriving a version.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push to a PR makes the in-flight run obsolete, so cancel it rather than
+# pay for a result nobody reads. main is exempt: every landed commit keeps a
+# status of its own.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # fmt and clippy are platform-independent, so they run once on Linux rather
+  # than three times across the matrix.
+  fmt:
+    name: fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Nothing here pushes, so don't leave a usable token in .git/config
+          # where a dependency's build script could reach it.
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --all --check
+
+  clippy:
+    name: clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      # --all-targets covers tests and benches, which are easy to leave
+      # unlinted otherwise.
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+
+  test:
+    # An interpreter touches the filesystem and the terminal, and both differ
+    # on Windows. Running the matrix from the start means platform assumptions
+    # surface as they are written rather than at the first bug report.
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test --all-features

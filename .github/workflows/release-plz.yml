@@ -1,0 +1,75 @@
+name: Release-plz
+
+# Two jobs on two different triggers, guarded by `if` below.
+#
+# release-pr runs only when you dispatch it manually: that button press is the
+# "cut a release" moment, and until you press it no release PR exists. Leaving
+# it on `push` instead would keep a release PR open permanently, continuously
+# rewriting itself as commits land.
+#
+# release runs on push, so it acts on the squashed release commit once you
+# merge that PR.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+# No ambient permissions; each job takes only what it needs.
+permissions: {}
+
+jobs:
+  # Opens the release PR: bumps the version in Cargo.toml and builds
+  # CHANGELOG.md from the conventional commits since the last release. Its
+  # default title is "chore: release v<version>", which pr-title.yml accepts.
+  release-pr:
+    name: release-pr
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    # Guards against two dispatches racing to write the same release branch.
+    concurrency:
+      group: release-plz-pr
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # release-plz derives the version from history, so it needs all of
+          # it, not the default shallow clone.
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: release-plz/action@v0.5.133
+        with:
+          command: release-pr
+        env:
+          # Swap this for a PAT or GitHub App token the day main requires
+          # status checks: the default token cannot start workflow runs, so
+          # this PR's checks would sit pending forever and never merge.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+  # Runs after the release PR is squashed into main: tags that commit, cuts a
+  # GitHub Release, and publishes to crates.io. Creating tags is all this
+  # needs, which a Release Tags ruleset forbidding update/deletion still
+  # allows. No-ops on every ordinary feature merge.
+  release:
+    name: release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: release-plz/action@v0.5.133
+        with:
+          command: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
