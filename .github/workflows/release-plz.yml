@@ -44,10 +44,12 @@ jobs:
         with:
           command: release-pr
         env:
-          # Swap this for a PAT or GitHub App token the day main requires
-          # status checks: the default token cannot start workflow runs, so
-          # this PR's checks would sit pending forever and never merge.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # A fine-grained PAT rather than the default token. main requires
+          # status checks, and a PR opened with GITHUB_TOKEN cannot start
+          # workflow runs, so this PR's checks would sit pending forever and
+          # it would never merge. The variable name stays GITHUB_TOKEN because
+          # that is what the action reads; only the secret behind it changes.
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN }}
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
   # Runs after the release PR is squashed into main: tags that commit, cuts a
@@ -71,5 +73,7 @@ jobs:
         with:
           command: release
         env:
+          # The default token is enough here: this job tags, releases and
+          # publishes, and needs to trigger no further workflow.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
