@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en-US" dir="ltr" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rezrov</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Rezrov GitHub Page" />
+    <meta name="author" content="Jeff Nyman" />
+    <meta name="apple-mobile-web-app-title" content="Rezrov" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./assets/site/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="./assets/site/favicon.svg" />
+    <link rel="shortcut icon" href="./assets/site/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/site/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="./assets/site/site.webmanifest" />
+    <link
+      rel="preload"
+      href="./styles/fonts/Montserrat-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="./styles/fonts/Montserrat-Italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./styles/site.css?v=1.0" />
+    <script type="module" src="./scripts/site.js" defer></script>
+  </head>
+
+  <body>
+    <main>
+      <article>
+        <h1>
+          <img
+            src="./assets/images/rerzov-on-stone.png"
+            class="title"
+            width="868"
+            height="348"
+            alt="Rezrov"
+          />
+        </h1>
+
+        <p>
+          My goal with Rezrov is creating a working emulator of the
+          <a href="https://en.wikipedia.org/wiki/Z-machine">Z-Machine</a> and an
+          interpreter for
+          <a href="http://fileformats.archiveteam.org/wiki/Z-code">zcode</a>
+          programs that will run on that machine. Rezrov also takes aim at
+          <a href="https://www.eblong.com/zarf/glulx/">Glulx</a>, a second and
+          far roomier virtual machine built two decades after the first. Either
+          way, what I am building is an
+          <a href="http://www.ifwiki.org/index.php/Interpreter"
+            >interactive fiction interpreter</a
+          >. Depending on your age and/or nostalgia factor, you might better
+          know "interactive fiction" by the name "text adventure."
+        </p>
+
+        <p class="note">
+          Fun fact for nostalgia retrogamers: the term
+          <a href="https://en.wikipedia.org/wiki/Interactive_fiction"
+            >"interactive fiction"</a
+          >
+          was likely first used by
+          <a href="https://en.wikipedia.org/wiki/Robert_Lafore">Robert Lafore</a
+          >.
+        </p>
+
+        <p>
+          The Z-Machine was originally created by a company called
+          <a href="https://en.wikipedia.org/wiki/Infocom">Infocom</a> back in
+          the late 1970s to play their adventure game
+          <a href="https://en.wikipedia.org/wiki/Zork"><em>Zork</em></a> on
+          microcomputers (which were the first
+          <a href="https://en.wikipedia.org/wiki/Personal_computer"
+            >"personal computers"</a
+          >
+          with a side evolution into
+          <a href="https://en.wikipedia.org/wiki/Home_computer"
+            >"home computers"</a
+          >). Eventually, this Z-Machine was used to play many text adventure
+          games created by the same company throughout the 1980s.
+        </p>
+
+        <img
+          class="prop50"
+          src="./assets/images/infocom-games.jpg"
+          width="640"
+          height="480"
+          alt="Infocom logo with backsplash of their games"
+        />
+
+        <p>
+          Starting in the 1990s, after Infocom was acquired by
+          <a href="https://en.wikipedia.org/wiki/Activision">Activision</a> and
+          effectively dissolved, hobbyists reverse-engineered the Z-Machine and
+          games have been created for it ever since.
+        </p>
+
+        <p>
+          Those hobbyists eventually hit the same wall Infocom would have hit.
+          The Z-Machine is a 16-bit design from the late 1970s, and by the
+          1990s the size of a story was being decided by the architecture
+          rather than by the author. In 1999,
+          <a href="https://eblong.com/zarf/">Andrew Plotkin</a> answered that
+          with <a href="https://www.eblong.com/zarf/glulx/">Glulx</a>, a 32-bit
+          machine designed for the same purpose with vastly more room to work
+          in.
+        </p>
+
+        <p>
+          Neither machine replaced the other. Both are still in use, and the
+          same authoring tools can compile to either one. So Rezrov aims at
+          both: the six versions of the Z-Machine that Infocom built, the two
+          later versions the Inform community added, and Glulx.
+        </p>
+
+        <p class="note">
+          These "games" are often referred to as "stories," keeping with the
+          focus on interactive <em>fiction</em>.
+        </p>
+
+        <h2>Content Areas</h2>
+
+        <ul>
+          <li><a href="./articles/ontology.html">The Ontology of Rezrov</a></li>
+        </ul>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+:root {
+  --ff-base: "Montserrat", sans-serif;
+  --ff-heading: "Kyiv Sans", sans-serif;
+  --ff-mono: "Roboto Mono", monospace;
+
+  --fs-200: clamp(0.875rem, calc(0.85rem + 0.125vw), 0.95rem);
+  --fs-300: clamp(1rem, calc(0.95rem + 0.25vw), 1.125rem);
+  --fs-400: clamp(1.125rem, calc(1.05rem + 0.375vw), 1.25rem);
+  --fs-500: clamp(1.25rem, calc(1.15rem + 0.5vw), 1.5rem);
+  --fs-600: clamp(1.5rem, calc(1.3rem + 1vw), 2rem);
+  --fs-700: clamp(2rem, calc(1.6rem + 2vw), 3rem);
+  --fs-800: clamp(2.5rem, calc(1.8rem + 3.5vw), 4rem);
+  --fs-900: clamp(3rem, calc(2rem + 5vw), 5.5rem);
+
+  --line-height: 1.7;
+  --letter-spacing: 0.01em;
+  --word-spacing: 0.05em;
+  --content-width: 65ch;
+  --content-padding: clamp(1rem, 5vw, 2rem);
+
+  --para-indent: 0.8em;
+
+  /* ---------------------------------------------------------------
+     Color: light theme (the default).
+
+     Every color the site paints is defined here and only here, so a
+     theme is a matter of overriding this block. The dark values live
+     in the two blocks below.
+
+     Ratios in the comments are WCAG 2.1 contrast against --clr-bg.
+     --------------------------------------------------------------- */
+
+  /* Surfaces */
+  --clr-bg: hsl(210 22% 98%);
+  --clr-surface: hsl(212 22% 95%);
+  --clr-border: hsl(215 18% 82%);
+
+  /* Text */
+  --clr-text: hsl(215 26% 20%); /* 12.6 */
+  --clr-text-muted: hsl(215 16% 36%); /* 6.8 */
+  --clr-heading: hsl(215 32% 14%); /* 15.4 */
+
+  /* Links */
+  --clr-link: hsl(213 88% 34%); /* 7.5 */
+  --clr-link-hover: hsl(213 92% 26%); /* 10.2 */
+  --clr-link-visited: var(--clr-link);
+
+  /* Note callout */
+  --clr-note: hsl(222 34% 32%); /* 8.9 */
+  --clr-note-border: hsl(234 42% 58%);
+  --clr-note-bg: hsl(228 60% 97%);
+
+  /* Tip callout */
+  --clr-tip: hsl(340 46% 30%); /* 9.6 */
+  --clr-tip-border: hsl(340 44% 58%);
+  --clr-tip-bg: hsl(340 60% 97%);
+
+  /* Inline code */
+  --clr-code: hsl(5 72% 36%); /* 7.4 */
+  --clr-code-border: hsl(5 60% 62%);
+  --clr-code-bg: hsl(10 60% 97%);
+
+  /* Fenced code block (kept dark in both themes) */
+  --clr-codeblock-text: hsl(240 33% 94%);
+  --clr-codeblock-bg: hsl(236 15% 18%);
+  --clr-codeblock-border: hsl(236 15% 18%);
+
+  --clr-selection-bg: hsl(213 90% 88%);
+  --clr-selection-text: hsl(215 32% 14%);
+
+  color-scheme: light dark;
+  accent-color: var(--clr-link);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  font-optical-sizing: auto;
+  text-rendering: optimizeSpeed;
+}
+
+/* Dark theme, following the operating system. The :not() guard lets an
+   explicit data-theme="light" opt back out. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --clr-bg: hsl(220 18% 11%);
+    --clr-surface: hsl(220 15% 16%);
+    --clr-border: hsl(220 12% 30%);
+
+    --clr-text: hsl(214 20% 88%); /* 13.0 */
+    --clr-text-muted: hsl(214 14% 66%); /* 7.1 */
+    --clr-heading: hsl(210 28% 95%); /* 15.5 */
+
+    --clr-link: hsl(206 88% 70%); /* 8.4 */
+    --clr-link-hover: hsl(200 92% 80%); /* 11.6 */
+    --clr-link-visited: var(--clr-link);
+
+    --clr-note: hsl(222 48% 80%); /* 9.8 */
+    --clr-note-border: hsl(228 44% 56%);
+    --clr-note-bg: hsl(228 28% 15%);
+
+    --clr-tip: hsl(340 62% 80%); /* 9.3 */
+    --clr-tip-border: hsl(340 38% 52%);
+    --clr-tip-bg: hsl(340 22% 15%);
+
+    --clr-code: hsl(8 82% 74%); /* 7.8 */
+    --clr-code-border: hsl(8 45% 46%);
+    --clr-code-bg: hsl(8 20% 16%);
+
+    --clr-codeblock-text: hsl(240 30% 92%);
+    --clr-codeblock-bg: hsl(222 16% 19%);
+    --clr-codeblock-border: hsl(220 12% 32%);
+
+    --clr-selection-bg: hsl(213 60% 32%);
+    --clr-selection-text: hsl(210 28% 95%);
+  }
+}
+
+/* Dark theme forced, regardless of the operating system. Duplicating the
+   block is what lets a toggle win in both directions. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --clr-bg: hsl(220 18% 11%);
+  --clr-surface: hsl(220 15% 16%);
+  --clr-border: hsl(220 12% 30%);
+
+  --clr-text: hsl(214 20% 88%);
+  --clr-text-muted: hsl(214 14% 66%);
+  --clr-heading: hsl(210 28% 95%);
+
+  --clr-link: hsl(206 88% 70%);
+  --clr-link-hover: hsl(200 92% 80%);
+  --clr-link-visited: var(--clr-link);
+
+  --clr-note: hsl(222 48% 80%);
+  --clr-note-border: hsl(228 44% 56%);
+  --clr-note-bg: hsl(228 28% 15%);
+
+  --clr-tip: hsl(340 62% 80%);
+  --clr-tip-border: hsl(340 38% 52%);
+  --clr-tip-bg: hsl(340 22% 15%);
+
+  --clr-code: hsl(8 82% 74%);
+  --clr-code-border: hsl(8 45% 46%);
+  --clr-code-bg: hsl(8 20% 16%);
+
+  --clr-codeblock-text: hsl(240 30% 92%);
+  --clr-codeblock-bg: hsl(222 16% 19%);
+  --clr-codeblock-border: hsl(220 12% 32%);
+
+  --clr-selection-bg: hsl(213 60% 32%);
+  --clr-selection-text: hsl(210 28% 95%);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}

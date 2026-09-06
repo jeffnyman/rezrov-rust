@@ -1,0 +1,345 @@
+body {
+  min-height: 100svh;
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+}
+
+::selection {
+  background-color: var(--clr-selection-bg);
+  color: var(--clr-selection-text);
+}
+
+article {
+  font-family: var(--ff-base);
+  font-size: var(--fs-400);
+  line-height: var(--line-height);
+  letter-spacing: var(--letter-spacing);
+  word-spacing: var(--word-spacing);
+  max-width: var(--content-width);
+  padding: 0 var(--content-padding);
+  margin: 2rem auto 3rem;
+  color: var(--clr-text);
+}
+
+article :is(ul, ol) {
+  margin: 1em 2em;
+}
+
+em {
+  font-family: var(--ff-base);
+  font-weight: 400;
+  font-style: italic;
+}
+
+strong {
+  font-family: var(--ff-base);
+  font-weight: 700;
+  font-style: normal;
+}
+
+strong em,
+em strong {
+  font-family: var(--ff-base);
+  font-weight: 700;
+  font-style: italic;
+}
+
+p,
+li,
+blockquote {
+  text-align: justify;
+  text-wrap: pretty;
+  margin-bottom: 1.5rem;
+}
+
+img {
+  margin: 1.8em auto;
+}
+
+img.prop30 {
+  width: 30%;
+  height: auto;
+}
+
+img.prop40 {
+  width: 40%;
+  height: auto;
+}
+
+img.prop50 {
+  width: 50%;
+  height: auto;
+}
+
+img.prop60 {
+  width: 60%;
+  height: auto;
+}
+
+img.prop70 {
+  width: 70%;
+  height: auto;
+}
+
+img.prop80 {
+  width: 80%;
+  height: auto;
+}
+
+a {
+  color: var(--clr-link);
+}
+
+a:visited {
+  color: var(--clr-link-visited);
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--clr-link-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--clr-link);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+a:not([class]) {
+  text-decoration-thickness: max(0.08em, 1px);
+  text-underline-offset: 0.25em;
+  text-decoration-skip-ink: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--ff-heading);
+  line-height: 1.1;
+  text-wrap: balance;
+  margin-bottom: 0.5em;
+  color: var(--clr-heading);
+}
+
+h1 {
+  --font-weight: 120;
+  --font-midline: 0;
+  --font-contrast: 250;
+
+  font-family: var(--ff-heading);
+  font-size: var(--fs-700);
+  font-variation-settings:
+    "wght" var(--font-weight),
+    "CONT" var(--font-contrast),
+    "MIDL" var(--font-midline);
+  transition: font-variation-settings 500ms;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+h1:hover {
+  font-variation-settings:
+    "wght" 1000,
+    "CONT" 550,
+    "MIDL" -1000;
+}
+
+h2 {
+  --font-weight: 120;
+  --font-midline: 0;
+  --font-contrast: 0;
+  font-size: var(--fs-600);
+  font-variation-settings:
+    "wght" var(--font-weight),
+    "MIDL" var(--font-midline),
+    "CONT" var(--font-contrast);
+}
+
+h3 {
+  --font-weight: 100;
+  --font-midline: 0;
+  --font-contrast: 250;
+  --flow-space: 1em;
+  font-size: var(--fs-500);
+  font-variation-settings:
+    "wght" var(--font-weight),
+    "CONT" var(--font-contrast),
+    "MIDL" var(--font-midline);
+}
+
+h4 {
+  --font-weight: 190;
+  --font-midline: 0;
+  --font-contrast: 250;
+
+  font-size: var(--fs-400);
+  font-variation-settings:
+    "wght" var(--font-weight),
+    "CONT" var(--font-contrast),
+    "MIDL" var(--font-midline);
+}
+
+blockquote {
+  position: relative;
+  margin: 0.2em 1.8em;
+  padding: 1.2em 1.875em 1.2em 2.68em;
+  color: var(--clr-text-muted);
+}
+
+blockquote:not([class])::before {
+  content: "\201C";
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-family: "Times New Roman", serif;
+  font-size: 4em;
+  font-weight: bold;
+  color: var(--clr-border);
+}
+
+blockquote:not([class])::after {
+  content: "";
+}
+
+/* Tables ------------------------------------------------------------ */
+
+/* Wrap a table in <div class="table-scroll"> so wide tables scroll on
+   their own instead of pushing the page sideways. */
+.table-scroll {
+  overflow-x: auto;
+  margin: 1.8em 0;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-300);
+  word-spacing: normal;
+  text-align: left;
+}
+
+caption {
+  caption-side: top;
+  padding-bottom: 0.7em;
+  color: var(--clr-text-muted);
+  font-size: var(--fs-200);
+  text-align: left;
+  text-wrap: pretty;
+}
+
+th,
+td {
+  padding: 0.55em 0.9em 0.55em 0;
+  border-bottom: 1px solid var(--clr-border);
+  vertical-align: baseline;
+  text-align: left;
+}
+
+thead th {
+  padding-top: 0;
+  font-size: var(--fs-200);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--clr-text-muted);
+  white-space: nowrap;
+}
+
+tbody th {
+  font-weight: 700;
+  color: var(--clr-heading);
+}
+
+tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+/* Columns of figures line up when the digits are the same width. */
+td.num {
+  font-family: var(--ff-mono);
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+
+pre {
+  padding: 0;
+  max-width: 100%;
+  white-space: pre-line;
+  font-size: var(--fs-300);
+  margin: 1.2em 1.8em;
+}
+
+pre code {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  border: 1px solid var(--clr-codeblock-border);
+  border-radius: 10px;
+  font-family: var(--ff-mono);
+  font-size: 0.8em;
+  word-spacing: normal;
+  letter-spacing: normal;
+  background-color: var(--clr-codeblock-bg);
+  color: var(--clr-codeblock-text);
+  box-shadow:
+    1px 1px var(--clr-codeblock-border),
+    2px 2px var(--clr-codeblock-border);
+  white-space: pre;
+}
+
+code {
+  margin: 0 0.25rem;
+  padding: 0.0625rem 0.5rem;
+  border: 1px solid var(--clr-code-border);
+  border-radius: 0.125rem;
+  font-family: var(--ff-mono);
+  font-size: 0.9em;
+  background-color: var(--clr-code-bg);
+  color: var(--clr-code);
+  box-shadow:
+    1px 1px var(--clr-code-border),
+    2px 2px var(--clr-code-border);
+}
+
+.note {
+  margin: 1.9em;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--clr-note-border);
+  border-radius: 16px;
+  background-color: var(--clr-note-bg);
+  color: var(--clr-note);
+}
+
+.tip {
+  margin: 1.9em;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--clr-tip-border);
+  border-radius: 16px;
+  background-color: var(--clr-tip-bg);
+  color: var(--clr-tip);
+}
+
+.note a,
+.tip a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+.note a:hover,
+.tip a:hover {
+  text-decoration-color: currentColor;
+}
+
+:where(p, blockquote, img, pre, ul, ol, .table-scroll)
+  + p:not(.tip):not(.note) {
+  text-indent: var(--para-indent);
+}
+
+.title {
+  border-radius: 2.5rem;
+  corner-shape: squircle;
+}

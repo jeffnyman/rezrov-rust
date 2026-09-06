@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en-US" dir="ltr" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <title>The Ontology of Rezrov</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Rezrov GitHub Page" />
+    <meta name="author" content="Jeff Nyman" />
+    <meta name="apple-mobile-web-app-title" content="Rezrov" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../assets/site/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="../assets/site/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/site/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/site/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="../assets/site/site.webmanifest" />
+    <link
+      rel="preload"
+      href="../styles/fonts/Montserrat-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../styles/fonts/Montserrat-Italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../styles/site.css?v=1.0" />
+    <script type="module" src="../scripts/site.js" defer></script>
+  </head>
+
+  <body>
+    <main>
+      <article>
+        <h1>The Ontology of Rezrov</h1>
+
+        <img
+          src="../assets/images/zmachine-emulation.png"
+          width="645"
+          height="403"
+          alt="Zork emulated on a Z-Machine"
+        />
+
+        <p>
+          The above image shows an example of a story file (zcode) being
+          executed by a Z-Machine interpreter. This execution of zcode is what
+          Rezrov aims to do. Understanding the Z-Machine architecture and how
+          zcode programs run is essential to explaining how Rezrov will operate.
+          The Z-Machine is where this starts, though, not where it ends. There
+          is a second machine involved, and the last part of this page is about
+          what it is and why it had to exist.
+        </p>
+
+        <h2>What is Rezrov Going to Be?</h2>
+
+        <p>
+          Let's start with this statement: Rezrov is a Rust-based ZIP
+          implementation that allows for the emulation of the Z-Machine. Great.
+          But what does <em>that</em> mean? Let's break it down a bit.
+        </p>
+
+        <p>
+          That statement is accurate and it is also incomplete, because it
+          accounts for the Z-Machine and nothing else. Hold onto it anyway. The
+          Z-Machine genuinely is where this starts, and the missing half will
+          make more sense once the groundwork is laid.
+        </p>
+
+        <p>
+          The goal of Rezrov is to be an emulator. Any emulator's goal is to
+          execute the binary files from some specific machine directly. Let's
+          consider another retro-gaming example. Atari 2600 cartridges contained
+          binary files that were the instructions for how the game would play
+          once the cartridge was plugged into a console.
+        </p>
+
+        <img
+          src="../assets/images/atari2600-cartridge-rom.jpg"
+          width="577"
+          height="541"
+          alt="Atari 2600 playing cartridges."
+        />
+
+        <p>
+          What you see in that above image is actual Atari 2600 with the use of
+          a tool called ROM Scanner. This device lets you use multiple
+          cartridges at a time and select which one to play. Each cartridge
+          contains code that makes up the logic of the game program, stored in
+          binary. That binary can be pulled out of those cartridges and stored
+          as a binary file, usually called a ROM. You can build an Atari 2600
+          emulator that can take one of those binary files and execute it
+          <em>as if it were running on an Atari 2600</em>.
+        </p>
+
+        <img
+          src="../assets/images/atari2600-rom-emulation.jpg"
+          width="1366"
+          height="768"
+          alt="Atari 2600 emulating a game."
+        />
+
+        <p>
+          What that above image shows you is a game being played in a virtual
+          Atari 2600, with the portion of the screen to the left showing the
+          contents of the binary file. Those are the instructions of the game.
+          The portion of the screen to the right shows the game being played
+          just as it would have been had the binary been in a cartridge and had
+          that cartridge been plugged into an actual Atari 2600 console.
+        </p>
+
+        <p>
+          What I just described there applies to any machine, such as a Gameboy
+          or a PlayStation or whatever else. The binary files that execute on
+          these machines are always assembly-level instructions. So what does
+          that mean for Rezrov?
+        </p>
+
+        <ul>
+          <li>
+            The machine to be emulated is the
+            <a href="https://en.wikipedia.org/wiki/Z-machine">Z-Machine</a>.
+          </li>
+          <li>
+            The binary files to be executed are called <em>story files</em> that
+            contain
+            <a href="http://fileformats.archiveteam.org/wiki/Z-code">zcode</a>.
+          </li>
+          <li>
+            There is also a second machine,
+            <a href="https://www.eblong.com/zarf/glulx/">Glulx</a>, with story
+            files of its own. That one gets its own section below.
+          </li>
+        </ul>
+
+        <p>
+          Unlike the binary files for the Atari 2600, the story files in
+          question never ran on a machine's <em>actual</em> processor. Instead,
+          they ran on a <em>virtual</em> machine, and it was this virtual
+          machine that ran on the actual processor. So, as an example, a
+          (virtual) Z-Machine might be running on an (actual) Commodore 64 or an
+          (actual) Apple II. Here's the <em>Zork 1</em> zcode running on an
+          actual Commodore 64.
+        </p>
+
+        <img
+          src="../assets/images/zmachine-c64.png"
+          width="750"
+          height="470"
+          alt="Zork running on a Commdore 64."
+        />
+
+        <p>And here's the same zcode running on a Commodore Amiga.</p>
+
+        <img
+          src="../assets/images/zmachine-amiga.png"
+          width="750"
+          height="470"
+          alt="Zork running on a Commodore Amiga."
+        />
+
+        <p>
+          And, just for good measure, the exact same zcode running on an Apple
+          II.
+        </p>
+
+        <img
+          src="../assets/images/zmachine-appleii.png"
+          width="750"
+          height="470"
+          alt="Zork running on an Apple II."
+        />
+
+        <h3>It's All About Emulation</h3>
+
+        <p>
+          All of the above means that the Z-Machine was never a physical
+          computing device made of circuits; thus, it was never physical
+          hardware. The Z-Machine was instead a virtual computing device that
+          had to be implemented in software. That's one part of what Rezrov
+          needs to be. Rezrov needs to be able <em>emulate</em> a Z-Machine.
+        </p>
+
+        <p>
+          Just as the binary files for the Atari 2600 were made up of assembly
+          instructions for graphical games, the story files I'm referring to are
+          made up of assembly instructions for text adventure games. These text
+          adventure games and the Z-Machine on which they ran were created by
+          <a href="https://en.wikipedia.org/wiki/Infocom">Infocom</a> back in
+          the late 1970s and through most of the 1980s.
+        </p>
+
+        <p>
+          In the case of the Atari 2600, the binary files were written directly
+          in
+          <a href="https://en.wikibooks.org/wiki/6502_Assembly"
+            >6502 assembly language</a
+          >. In the case of the story files, the assembly instructions are
+          actually a compiled form of <em>z-language</em>, which was more often
+          known as
+          <a href="http://www.ifwiki.org/index.php/ZIL">ZIL</a>
+          (<strong>Z</strong>ork <strong>I</strong>mplementation
+          <strong>L</strong>anguage). This compiled assembly code is referred to
+          as <em>z-machine code</em> or just <em>zcode</em>.
+        </p>
+
+        <p>
+          In fact, this is a form of code known as <em>bytecode</em>, which is
+          code that makes up an instruction set designed to be run on a
+          particular interpreter. This is identical to the concept of Java
+          bytecode, which is the instruction set for code that can run on a Java
+          Virtual Machine (JVM) via a Java Runtime Engine (JRE). The language
+          used to create the bytecode doesn't necessarily matter. For example,
+          you can compile Java, Groovy, or Clojure programs, which all produce
+          bytecode that runs on the JVM. Similar to Microsoft's .NET
+          implementation of the Common Language Runtime (CLR) that can execute
+          compiled C#, F#, and VB.NET.
+        </p>
+
+        <p>
+          The same applies in this context. Someone can compile a story file
+          using a tool like
+          <a href="https://foss.heptapod.net/zilf/zilf/-/wikis/home">ZILF</a>,
+          <a href="https://www.linusakesson.net/dialog/">Dialog</a>, or
+          <a href="https://ganelson.github.io/inform-website/">Inform</a> and as
+          long as those tools produce the appropriate bytecode, that bytecode
+          will run on the Z-Machine.
+        </p>
+
+        <pre><code>
+        "The answer is ", 3 * total + 1;
+      </code></pre>
+
+        <p>
+          This is essentially a statement in the high-level language of Inform,
+          which is very different than the ZIL that Infocom was using. An
+          equivalent ZIL might look something like this:
+        </p>
+
+        <pre><code>
+            &lt;SETG TOTAL <* ,TOTAL 3 >>
+            &lt;SETG TOTAL <+ ,TOTAL 1 >>
+            &lt;TELL "[ The answer is " N .TOTAL ".]" >)>>
+        </code></pre>
+
+        <p>
+          However, the nature of the source code matters not at all. What
+          matters is the <em>bytecode</em>. The above logic, in either case,
+          would be rendered something like this:
+        </p>
+
+        <pre><code>
+            @print "The answer is ";
+            @mul 3 total -> x;
+            @add x 1 -> x;
+            @print_num x;
+            @new_line;
+            @rtrue;
+        </code></pre>
+
+        <p>What I have there is assembly code.</p>
+
+        <h3>But It's Also About Interpretation</h3>
+
+        <p>
+          Thus, a "Z-Language Interpreter" or a "ZIL Interpreter" is basically
+          designed to execute the instruction set of the zcode, which was, in
+          turn, intended to be executed on a Z-Machine (virtual) processor. What
+          language was used to create that zcode is mainly irrelevant.
+        </p>
+
+        <p>
+          Rezrov will be one of those interpreters, a type of ZIP. A ZIP
+          (<strong>Z</strong>-Language <strong>I</strong>nterpreter
+          <strong>P</strong>rogram) was a program, or rather a series of
+          programs, written by Infocom. Infocom referred to their own
+          interpreters by the following designations:
+        </p>
+
+        <ul>
+          <li>ZIP (versions 1 to 3)</li>
+          <li>EZIP / LZIP (version 4) ("extended" or "expanded")</li>
+          <li>XZIP (version 5) ("experimental")</li>
+          <li>YZIP (version 6) ("successor to X")</li>
+        </ul>
+
+        <p class="note">
+          There was apparently a version called GZIP (Graphical ZIP). This
+          particular ZIP was used for a one-off project from Infocom called
+          <a href="https://en.wikipedia.org/wiki/Fooblitzky">Fooblitzky</a>.
+          That game was intended to be a multiplayer strategy game quite
+          different from the text adventures for which most ZIPs were designed.
+        </p>
+
+        <p>
+          Based on surviving notes from the company, Infocom did think about the
+          possibility of an interpreter capable of running all versions. "One
+          interpreter to rule them all," so to speak. It's unknown how far they
+          took this idea, but they didn't release such an interpreter, at least
+          so far as anyone has found.
+        </p>
+
+        <p>
+          The point is that each ZIP was a program that emulated the hardware
+          instruction set specified for the Z-Machine. Even though the Z-Machine
+          was never <em>actually</em> hardware, its operation basics were just
+          like any processor that communicated with input and output devices and
+          performed operations via instructions.
+        </p>
+
+        <h2>Starting Concepts</h2>
+
+        <p>Here are a few starting points that are crucial to understand:</p>
+
+        <ol>
+          <li>The Z-Machine is a virtual computer.</li>
+          <li>The machine language of the Z-Machine is called zcode.</li>
+          <li>There are six Infocom versions of the Z-Machine.</li>
+          <li>There are two Inform versions of the Z-Machine.</li>
+          <li>
+            The structure and operation of zcode can differ between the
+            versions.
+          </li>
+          <li>
+            Glulx is a separate virtual computer, not a ninth version of the
+            Z-Machine.
+          </li>
+          <li>
+            Both machines are current. Neither one retired the other.
+          </li>
+        </ol>
+
+        <p>
+          In the above, "Inform" refers to a development system that was created
+          to allow for compiling text adventures down into a bytecode format
+          that could be read by the Z-Machine. Many saw this tool as the
+          successor to the Infocom compiler known as ZILCH.
+        </p>
+
+        <img
+          src="../assets/images/infocom-zmachine-tools.jpg"
+          width="842"
+          height="389"
+          alt="Infocom tool chain."
+        />
+
+        <p>
+          That image comes from the 2014 Game Developers Conference,
+          specifically the talk by Dave Lebling called
+          <a href="https://archive.org/details/GDC2014Lebling"
+            >"Classic Game Postmortem: Zork"</a
+          >. You can also see a
+          <a href="https://adventuregamers.com/articles/view/26224"
+            >write up of that presentation</a
+          >.
+        </p>
+
+        <p>
+          The Z-Machine was originally a closed proprietary technology. The
+          implementation of this machine, although not its general existence,
+          was guarded closely by Infocom since this provided their competitive
+          advantage over all other rivals at the time. It was essentially their
+          "secret sauce." In the early to mid-1990s, when it was clear that
+          Infocom was dissolving and would be no more, various people tried to
+          reverse engineer what made the Infocom games work.
+        </p>
+
+        <p>Regarding those versions, the Z-Machine specification says:</p>
+
+        <blockquote>
+          Eight Versions of the Z-machine exist, and the first byte of any
+          "story file" (that is: any Z-machine program) gives the Version number
+          it must be interpreted under.
+        </blockquote>
+
+        <p>
+          You can think of these versions as emulations of the architecture.
+          Consider how Apple released the Apple I (1976), Apple II (1977), Apple
+          III (1980), and Apple Lisa (1983). Each of these was effectively an
+          evolution of a processing architecture. The same applies to the
+          Z-Machine versions, even though that architecture was entirely
+          virtual.
+        </p>
+
+        <p>
+          The Z-Machine specification also tells us something quite important.
+        </p>
+
+        <blockquote>
+          The design's cardinal principle is that any game is 100% portable to
+          different computers: that is, any legal program exactly determines its
+          behaviour.
+        </blockquote>
+
+        <p>
+          In this context, a legal program refers to a program that adheres to
+          the Z-Machine specification. The specification defines how the
+          Z-Machine should behave, including how it should interpret and execute
+          the instructions provided by zcode programs.
+        </p>
+
+        <p>
+          By stating that any legal program exactly determines its behavior, the
+          specification emphasizes that the behavior of a zcode program running
+          on the Z-Machine is entirely determined by the zcode program itself,
+          according to the rules defined in the Z-Machine specification. This
+          means that a zcode program should behave the same regardless of the
+          computer or operating system it's running on, as long as the Z-Machine
+          implementation is correct and adheres to the specification.
+        </p>
+
+        <h2>The Second Machine</h2>
+
+        <p>
+          That principle of portability is exactly why the rest of this page
+          exists. Everything above describes the Z-Machine and all of it still
+          holds. But the Z-Machine is not the only virtual computer Rezrov has
+          to become, because it is not the only one this world still runs on.
+        </p>
+
+        <h3>Why Glulx Exists</h3>
+
+        <p>
+          The Z-Machine is a 16-bit design. Infocom built it for microcomputers
+          that counted memory in kilobytes, and that assumption is welded into
+          the architecture. Addresses are two bytes wide. Text is packed three
+          characters to a 16-bit word. A version 8 story file can reach 512 KB,
+          which sounds roomy right up until you read the constraint sitting
+          underneath it:
+        </p>
+
+        <blockquote>
+          The total of dynamic plus static memory must not exceed 64K. (In
+          fact, 64K minus 2 bytes.)
+        </blockquote>
+
+        <p>
+          Everything past that boundary lives in high memory and is reachable
+          only through packed addresses. The working space a story actually has
+          is therefore far smaller than its file size suggests, and by the
+          1990s authors were writing stories that ran straight into it.
+        </p>
+
+        <p>
+          The answer was versions 7 and 8, added by
+          <a href="https://en.wikipedia.org/wiki/Graham_Nelson">Graham Nelson</a>
+          in 1995 so that his own game <em>Jigsaw</em> would fit. They are not
+          new capabilities. They change how packed addresses are scaled so that
+          more of the file becomes reachable, and that is very nearly all they
+          do.
+        </p>
+
+        <blockquote>
+          Throughout the specification, Versions 7 and 8 are identical to
+          Version 5 except as stated at 1.1.4 and 1.2.3 above.
+        </blockquote>
+
+        <p>
+          It worked, and it was plainly the last move available on that board.
+          So in 1999 <a href="https://eblong.com/zarf/">Andrew Plotkin</a> built
+          a different board.
+          <a href="https://www.eblong.com/zarf/glulx/">Glulx</a> is a 32-bit
+          virtual machine with the same job to do and none of the inherited
+          arithmetic. It is not Z-Machine version 9. It is a separate machine
+          with its own specification, its own instruction set, and its own file
+          format.
+        </p>
+
+        <h3>What Rezrov Will Target</h3>
+
+        <div class="table-scroll">
+          <table>
+            <caption>
+              Nine targets across two machines. The Z-Machine numbers are story
+              format versions. The Glulx number is the version of its
+              specification.
+            </caption>
+            <thead>
+              <tr>
+                <th>Machine</th>
+                <th>Version</th>
+                <th>Origin</th>
+                <th>Story file ceiling</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Z-Machine</th>
+                <td>1 to 3</td>
+                <td>Infocom</td>
+                <td class="num">128 KB</td>
+              </tr>
+              <tr>
+                <th>Z-Machine</th>
+                <td>4 and 5</td>
+                <td>Infocom</td>
+                <td class="num">256 KB</td>
+              </tr>
+              <tr>
+                <th>Z-Machine</th>
+                <td>6</td>
+                <td>Infocom</td>
+                <td class="num">512 KB</td>
+              </tr>
+              <tr>
+                <th>Z-Machine</th>
+                <td>7 and 8</td>
+                <td>Graham Nelson, 1995</td>
+                <td class="num">512 KB</td>
+              </tr>
+              <tr>
+                <th>Glulx</th>
+                <td>3.1.3</td>
+                <td>Andrew Plotkin, 1999</td>
+                <td class="num">4 GB</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="note">
+          Version 7 is more curiosity than target. It was specified and then
+          almost never used, because version 8 arrived and did the same job
+          without the address offsets version 7 needs. Rezrov should still
+          handle it, if only because refusing would leave an odd gap in a
+          machine that claims to run everything.
+        </p>
+
+        <h3>How the Two Machines Differ</h3>
+
+        <p>
+          The difference that matters is not that Glulx is bigger. It is that
+          Glulx is <em>emptier</em>. The Z-Machine specification describes far
+          more than a processor. It defines what an object is, how attributes
+          and properties are stored, how the dictionary is laid out, and how
+          text is encoded into those packed characters. All of that is part of
+          the machine, which is why a Z-Machine interpreter has to know what a
+          game object is. Plotkin's design note on the subject is blunt:
+        </p>
+
+        <blockquote>
+          Inform has long since outgrown many of the IF-specific features of
+          the Z-machine (such as the object structure.) So it makes sense to
+          remove those features, leaving a generic VM.
+        </blockquote>
+
+        <p>
+          Glulx has memory, a stack, arithmetic, and branching. Objects,
+          dictionaries, and parsers are structures the compiled program builds
+          for itself out of raw memory, and the machine holds no opinion about
+          any of them.
+        </p>
+
+        <div class="table-scroll">
+          <table>
+            <caption>
+              The differences that actually change how an interpreter gets
+              written.
+            </caption>
+            <thead>
+              <tr>
+                <th>&nbsp;</th>
+                <th>Z-Machine</th>
+                <th>Glulx</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Word size</th>
+                <td>16-bit</td>
+                <td>32-bit</td>
+              </tr>
+              <tr>
+                <th>Identified by</th>
+                <td>First byte is the version</td>
+                <td>First four bytes are <code>Glul</code></td>
+              </tr>
+              <tr>
+                <th>Object model</th>
+                <td>Defined by the machine</td>
+                <td>Built by the program</td>
+              </tr>
+              <tr>
+                <th>Dictionary</th>
+                <td>Defined by the machine</td>
+                <td>Built by the program</td>
+              </tr>
+              <tr>
+                <th>Text</th>
+                <td>ZSCII, three characters per word</td>
+                <td>Latin-1 or Unicode, optionally Huffman coded</td>
+              </tr>
+              <tr>
+                <th>Input and output</th>
+                <td>Opcodes in the specification</td>
+                <td>Handed off to Glk</td>
+              </tr>
+              <tr>
+                <th>Story file</th>
+                <td><code>.z1</code> through <code>.z8</code></td>
+                <td><code>.ulx</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Glk, and Why It Matters Here</h3>
+
+        <p>
+          One row in that table carries more weight than the others.
+          <a href="https://www.eblong.com/zarf/glk/">Glk</a> is a separate
+          specification, also Plotkin's, describing a portable interface for
+          text windows, input events, styles, sound, and graphics. It arrived
+          in 1997, two years ahead of Glulx, so Glulx was designed around it
+          rather than the other way about.
+        </p>
+
+        <blockquote>
+          No input/output facilities are built into the Glulx machine itself.
+          All Glulx interpreters support the Glk I/O facility (via the glk
+          opcode), and no other I/O facilities exist.
+        </blockquote>
+
+        <p>
+          A single opcode, taking a function selector and a pile of arguments,
+          hands the entire user interface over to the host. For Rezrov that is
+          a gift with a catch attached. The Glulx half of the project needs a
+          solid Glk implementation and very little else by way of presentation.
+          The Z-Machine half has to implement its own screen model, because its
+          specification insists on it.
+        </p>
+
+        <p class="tip">
+          Glk is not exclusive to Glulx. The Glk specification points out that
+          a version 5 or 8 Z-Machine can be layered on top of it as well, with
+          colored text the one known gap, and interpreters such as
+          <a href="https://www.ifwiki.org/Bocfel">Bocfel</a> already do exactly
+          that. Build Rezrov's Glk layer first and build it well, and both
+          halves can stand on it.
+        </p>
+
+        <h3>One Source, Two Outputs</h3>
+
+        <p>
+          There is a practical reason to support both machines instead of
+          picking one. Inform, the development system mentioned earlier,
+          compiles to either target from the same source. Inform 6 gained Glulx
+          output in release 6.30, and Inform 7 went further than that:
+        </p>
+
+        <blockquote>
+          Newly created projects are set up with the Glulx format.
+        </blockquote>
+
+        <p>
+          So Glulx is the default for anything written today, while the
+          Z-Machine holds the entire Infocom catalogue plus thirty years of
+          community work built on top of it. These two are not a sequence in
+          which one replaced the other. They are two live formats, and an
+          interpreter that handles only one of them turns away half the shelf.
+        </p>
+
+        <p class="note">
+          Both machines also travel in wrapped form. A
+          <a href="https://www.eblong.com/zarf/blorb/blorb.html">Blorb</a> file
+          bundles the story together with its pictures, sounds, and data files
+          so that the whole work ships as a single thing. The convention is
+          <code>.zblorb</code> for a wrapped Z-Machine story and
+          <code>.gblorb</code> for a wrapped Glulx one. Rezrov will have to
+          unwrap both before it can run either.
+        </p>
+      </article>
+    </main>
+  </body>
+</html>
