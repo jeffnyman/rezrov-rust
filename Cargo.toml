@@ -9,6 +9,6 @@ homepage = "https://jeffnyman.github.io/rezrov"
 repository = "https://github.com/jeffnyman/rezrov"
 keywords = ["z-machine", "glulx", "infocom", "interpreter"]
 categories = ["emulators", "games"]
-exclude = [".editorconfig", ".gitattributes", ".gitignore", ".github"]
+exclude = [".editorconfig", ".gitattributes", ".gitignore", ".github", "docs"]
 
 [dependencies]
