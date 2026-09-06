@@ -1,0 +1,13 @@
+[package]
+name = "rezrov"
+version = "0.0.0"
+edition = "2024"
+description = "An interactive fiction interpreter."
+readme = "README.md"
+license = "MIT"
+homepage = "https://jeffnyman.github.io/rezrov"
+repository = "https://github.com/jeffnyman/rezrov"
+keywords = ["z-machine", "glulx", "infocom", "interpreter"]
+categories = ["emulators", "games"]
+
+[dependencies]
