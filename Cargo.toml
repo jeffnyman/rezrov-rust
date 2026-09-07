@@ -1,14 +1,11 @@
-[package]
-name = "rezrov"
+[workspace]
+members = ["crates/*"]
+resolver = "3"
+
+[workspace.package]
 version = "0.0.0"
 edition = "2024"
-description = "An interactive fiction interpreter."
-readme = "README.md"
 license = "MIT"
 homepage = "https://jeffnyman.github.io/rezrov"
 repository = "https://github.com/jeffnyman/rezrov"
-keywords = ["z-machine", "glulx", "infocom", "interpreter"]
-categories = ["emulators", "games"]
-exclude = [".editorconfig", ".gitattributes", ".gitignore", ".github", "docs"]
-
-[dependencies]
+readme = "README.md"
