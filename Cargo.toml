@@ -9,3 +9,6 @@ license = "MIT"
 homepage = "https://jeffnyman.github.io/rezrov"
 repository = "https://github.com/jeffnyman/rezrov"
 readme = "README.md"
+
+[workspace.dependencies]
+rezrov-zterp = { path = "crates/zterp", version = "0.0.0" }

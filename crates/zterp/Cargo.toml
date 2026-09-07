@@ -1,0 +1,14 @@
+[package]
+name = "rezrov-zterp"
+description = "A Z-Machine Interpreter."
+keywords = ["z-machine", "inform", "infocom", "interpreter"]
+categories = ["emulators", "game-development"]
+readme = "README.md"
+
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
