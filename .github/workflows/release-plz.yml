@@ -1,18 +1,25 @@
 name: Release-plz
 
-# Two jobs on two different triggers, guarded by `if` below.
+# Both commands are dispatched by hand, and the input below picks which one
+# runs. Nothing in this file fires on a merge.
 #
-# release-pr runs only when you dispatch it manually: that button press is the
-# "cut a release" moment, and until you press it no release PR exists. Leaving
-# it on `push` instead would keep a release PR open permanently, continuously
-# rewriting itself as commits land.
+# release-pr opens the release PR: that button press is the "cut a release"
+# moment, and until you press it no release PR exists. Leaving it on `push`
+# would keep one open permanently, rewriting itself as commits land.
 #
-# release runs on push, so it acts on the squashed release commit once you
-# merge that PR.
+# release acts on the squashed release commit once you merge that PR. It used
+# to run on every push to main, on the assumption it would find nothing to do.
+# That assumption only held while every crate was already on crates.io, so
+# adding a crate published it the moment it landed. Dispatching it makes a
+# release something you decide to do rather than something that happens.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
+    inputs:
+      command:
+        description: Which release-plz command to run
+        type: choice
+        options: [release-pr, release]
+        default: release-pr
 
 # No ambient permissions; each job takes only what it needs.
 permissions: {}
@@ -23,7 +30,7 @@ jobs:
   # default title is "chore: release v<version>", which pr-title.yml accepts.
   release-pr:
     name: release-pr
-    if: github.event_name == 'workflow_dispatch'
+    if: inputs.command == 'release-pr'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -52,13 +59,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN }}
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
-  # Runs after the release PR is squashed into main: tags that commit, cuts a
-  # GitHub Release, and publishes to crates.io. Creating tags is all this
-  # needs, which a Release Tags ruleset forbidding update/deletion still
-  # allows. No-ops on every ordinary feature merge.
+  # Dispatch this once the release PR is squashed into main: it tags that
+  # commit, cuts a GitHub Release, and publishes to crates.io. Creating tags is
+  # all this needs, which a Release Tags ruleset forbidding update/deletion
+  # still allows. It publishes any crate whose version is not on crates.io yet,
+  # so only run it when that is what you want.
   release:
     name: release
-    if: github.event_name == 'push'
+    if: inputs.command == 'release'
     runs-on: ubuntu-latest
     permissions:
       contents: write
