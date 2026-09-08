@@ -13,3 +13,4 @@ readme = "README.md"
 [workspace.dependencies]
 rezrov-zterp = { path = "crates/zterp", version = "0.0.0" }
 rezrov-gterp = { path = "crates/gterp", version = "0.0.0" }
+rezrov-cli-shell = { path = "crates/cli-shell", version = "0.0.0" }
