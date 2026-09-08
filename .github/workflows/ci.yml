@@ -50,8 +50,12 @@ jobs:
           components: clippy
       - uses: Swatinem/rust-cache@v2
       # --all-targets covers tests and benches, which are easy to leave
-      # unlinted otherwise.
-      - run: cargo clippy --all-targets --all-features -- -D warnings
+      # unlinted otherwise. --workspace is spelled out rather than relied on:
+      # the default package set is every member only while `default-members` is
+      # absent from the root manifest, and adding that key later (to make a
+      # bare `cargo run` pick a binary, say) would silently shrink this job to
+      # a single crate while it kept reporting green.
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
 
   test:
     # An interpreter touches the filesystem and the terminal, and both differ
@@ -69,4 +73,6 @@ jobs:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features
+      # --workspace for the same reason as clippy: name the scope rather than
+      # inherit it.
+      - run: cargo test --workspace --all-features
