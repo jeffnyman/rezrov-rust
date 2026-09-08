@@ -7,6 +7,10 @@ name = "rezrov"
 version = "0.0.0"
 
 [[package]]
+name = "rezrov-cli-shell"
+version = "0.0.0"
+
+[[package]]
 name = "rezrov-gterp"
 version = "0.0.0"
 
