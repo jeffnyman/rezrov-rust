@@ -11,6 +11,10 @@ name = "rezrov-gterp"
 version = "0.0.0"
 
 [[package]]
+name = "rezrov-gterp-cli"
+version = "0.0.0"
+
+[[package]]
 name = "rezrov-zterp"
 version = "0.0.0"
 

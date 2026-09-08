@@ -1,0 +1,18 @@
+[package]
+name = "rezrov-gterp-cli"
+description = "A Glulx Command Line Player"
+keywords = ["glulx", "inform", "player"]
+categories = ["games", "command-line-utilities"]
+readme = "README.md"
+
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "gterp"
+path = "src/main.rs"
+
+[dependencies]
