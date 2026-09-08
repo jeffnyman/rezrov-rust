@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Refuse to commit straight onto main. Switch to a branch first.
+#
+# For the rare time you actually mean it:
+#   ALLOW_MAIN_COMMIT=1 git commit ...
+
+protected="main"
+
+[ -n "$ALLOW_MAIN_COMMIT" ] && exit 0
+
+git_dir=$(git rev-parse --git-dir) || exit 0
+
+# Rebases, merges, cherry-picks and reverts all land commits as part of doing
+# their job, so stay out of the way while one of them is in progress.
+for marker in rebase-merge rebase-apply MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD; do
+    if [ -e "$git_dir/$marker" ]; then
+        exit 0
+    fi
+done
+
+# Detached HEAD is a deliberate move, so leave it alone.
+branch=$(git symbolic-ref --quiet --short HEAD) || exit 0
+
+if [ "$branch" = "$protected" ]; then
+    cat >&2 <<MSG
+
+Hold on, you are on $protected. Work here goes through a pull request.
+
+    git switch -c some-branch-name
+
+Anything you staged comes along with you, so just run the commit again after
+switching. If you really did mean to commit on $protected:
+
+    ALLOW_MAIN_COMMIT=1 git commit ...
+
+MSG
+    exit 1
+fi
+
+exit 0
