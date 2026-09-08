@@ -1,0 +1,53 @@
+name: Pages
+
+# The docs site is plain static HTML under docs/, published to GitHub Pages.
+#
+# This used to run in Pages' "deploy from a branch" mode, which rebuilds on
+# every push to main and has no way to ask whether anything under docs/
+# actually changed. Thirteen deployments for one docs change is what that looks
+# like. Building from a workflow instead means the path filter below decides,
+# so a Rust-only merge produces no deployment at all.
+#
+# Switching modes also drops Jekyll from the pipeline. Nothing here relies on
+# it: there is no _config.yml and no underscore-prefixed paths, so the files
+# are served exactly as they sit in the repo.
+on:
+  push:
+    branches: [main]
+    # The workflow lists itself so a change to the deployment logic can be
+    # proven without having to touch the site to trigger it.
+    paths: ["docs/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+# id-token is what lets deploy-pages prove to Pages who is deploying, so it is
+# required even though nothing here talks to a third party.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. Unlike CI, an in-flight run is not made obsolete by
+# a newer one: cancelling it could leave the site half-published, so queue
+# instead.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Nothing here pushes, so don't leave a usable token in .git/config.
+          persist-credentials: false
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs
+      - id: deployment
+        uses: actions/deploy-pages@v5
