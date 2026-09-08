@@ -1,0 +1,18 @@
+[package]
+name = "rezrov-zterp-cli"
+description = "A Z-Machine Command Line Player"
+keywords = ["z-machine", "inform", "infocom", "player"]
+categories = ["games", "command-line-utilities"]
+readme = "README.md"
+
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "zterp"
+path = "src/main.rs"
+
+[dependencies]

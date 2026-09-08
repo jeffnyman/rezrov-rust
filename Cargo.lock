@@ -13,3 +13,7 @@ version = "0.0.0"
 [[package]]
 name = "rezrov-zterp"
 version = "0.0.0"
+
+[[package]]
+name = "rezrov-zterp-cli"
+version = "0.0.0"
