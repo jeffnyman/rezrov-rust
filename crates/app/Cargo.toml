@@ -1,6 +1,6 @@
 [package]
 name = "rezrov"
-description = "An interactive fiction interpreter"
+description = "An Interactive Fiction Interpreter"
 keywords = ["z-machine", "glulx", "infocom", "interpreter"]
 categories = ["emulators", "games"]
 
