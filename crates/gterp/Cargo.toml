@@ -1,7 +1,7 @@
 [package]
-name = "rezrov-zterp"
-description = "A Z-Machine Interpreter"
-keywords = ["z-machine", "inform", "infocom", "interpreter"]
+name = "rezrov-gterp"
+description = "A Glulx Interpreter"
+keywords = ["glulx", "inform", "interpreter"]
 categories = ["emulators", "game-development"]
 readme = "README.md"
 
